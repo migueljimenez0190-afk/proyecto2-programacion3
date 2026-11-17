@@ -1,3 +1,7 @@
+# Título: GraphLab - io_handler.py
+# Nombre del autor: Miguel Jimenez
+# Fecha: 2026-11-16
+# Descripción: Backend de red de transporte del Proyecto 2.
 """Lee y guarda las conexiones del grafo en un archivo CSV."""
 
 import csv
@@ -46,20 +50,26 @@ def guardar_conexion(ruta: str, ori: str, des: str, peso: float) -> None:
         escritor.writerow([ori, des, peso])
 
 
-def cargar_grafo_desde_csv(ruta: str) -> Grafo:
+def cargar_grafo_desde_csv(ruta: str, avisos=None) -> Grafo:
     """Carga las conexiones válidas y omite filas corruptas del CSV."""
     grafo = Grafo()
+
+    def notificar(mensaje):
+        if avisos is None:
+            print(mensaje)
+        else:
+            avisos.append(mensaje)
 
     try:
         with open(ruta, mode="r", encoding="utf-8", newline="") as archivo:
             lector = csv.DictReader(archivo)
             if lector.fieldnames != ENCABEZADOS:
-                print(f"Encabezados incorrectos en '{ruta}'.")
+                notificar(f"Encabezados incorrectos en '{ruta}'.")
                 return grafo
 
             for num_linea, fila in enumerate(lector, start=2):
                 try:
-                    if None in fila:
+                    if None in fila or None in fila.values():
                         raise ValueError("Columnas adicionales.")
 
                     origen = fila["Origen"].strip()
@@ -68,11 +78,11 @@ def cargar_grafo_desde_csv(ruta: str) -> Grafo:
                     validar_datos_conexion(origen, destino, peso)
                     grafo.agregar_arista(origen, destino, peso)
                 except KeyError as error:
-                    print(f"Línea {num_linea}: columna {error} ausente.")
+                    notificar(f"Línea {num_linea}: columna {error} ausente.")
                 except (ValueError, TypeError) as error:
-                    print(f"Línea {num_linea}: datos inválidos: {error}")
+                    notificar(f"Línea {num_linea}: datos inválidos: {error}")
     except FileNotFoundError:
-        print(f"Archivo '{ruta}' no encontrado. Grafo vacío.")
+        notificar(f"Archivo '{ruta}' no encontrado. Grafo vacío.")
 
     return grafo
 

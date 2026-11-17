@@ -1,3 +1,7 @@
+# Título: GraphLab - main.py
+# Nombre del autor: Miguel Jimenez
+# Fecha: 2026-11-16
+# Descripción: Backend de red de transporte del Proyecto 2.
 """
 Módulo principal interactivo para la red de transporte.
 Permite registrar conexiones, persistirlas en CSV y consultar

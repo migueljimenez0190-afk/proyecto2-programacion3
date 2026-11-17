@@ -1,0 +1,11 @@
+$ python -m flake8 .
+
+
+exit_code=0
+
+$ python -m pytest -q
+................                                                         [100%]
+16 passed in 12.97s
+
+
+exit_code=0
