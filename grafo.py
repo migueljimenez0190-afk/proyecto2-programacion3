@@ -1,3 +1,7 @@
+# Título: GraphLab - grafo.py
+# Nombre del autor: Miguel Jimenez
+# Fecha: 2026-11-16
+# Descripción: Backend de red de transporte del Proyecto 2.
 """Representa una red de transporte mediante nodos, grafos y Dijkstra."""
 
 import math

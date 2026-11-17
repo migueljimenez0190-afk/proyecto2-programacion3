@@ -1,48 +1,43 @@
-# Proyecto 2 - Programación III
-## Red de Transporte con Dijkstra
+# GraphLab · Proyecto 3
 
-### Descripción
-Programa modular en Python para registrar conexiones entre
-nodos de una red de transporte, guardar los datos en un
-archivo CSV y calcular rutas de menor costo usando Dijkstra.
+Autor: Miguel Jimenez
 
-### Archivos
-- main.py: Menú interactivo.
-- grafo.py: Clases Nodo, Grafo y algoritmo Dijkstra.
-- io_handler.py: Lectura, escritura y validación del CSV.
-- nodos.csv: Almacena las conexiones de la red.
-- requirements.txt: Dependencia Flake8.
+Aplicación web de una red de transporte dirigida, desarrollada con Streamlit
+sobre el motor de grafos y la persistencia CSV del Proyecto 2.
 
-### Requisitos
-- Python 3
-- Flake8 para revisar el código.
+## Funcionalidad
 
-### Instalación
-python3 -m pip install -r requirements.txt
+- Cálculo de rutas mínimas con Dijkstra: origen, destino, recorrido y costo.
+- Registro de conexiones con pesos finitos no negativos.
+- Persistencia de cada conexión en nodos.csv y actualización del grafo en RAM.
+- Tabla de conexiones con Pandas y visualización de la red dirigida.
 
-### Ejecución
-python3 main.py
+## Arquitectura
 
-### Opciones del menú
-1. Agregar conexión: Solicita origen, destino y peso.
-2. Consultar ruta: Calcula el camino de menor costo.
-3. Mostrar conexiones: Muestra los nodos y sus conexiones.
-4. Salir: Finaliza el programa.
+- app.py: interfaz con pestañas, formulario y controles de texto.
+- grafo.py: clases Nodo y Grafo, y algoritmo de Dijkstra.
+- io_handler.py: validación, lectura y escritura CSV.
+- main.py: interfaz de consola del Proyecto 2.
+- nodos.csv: seis conexiones de ejemplo.
+- test_graphlab.py: pruebas funcionales y de integración.
 
-### Archivo CSV
-Los registros se guardan en nodos.csv con la estructura:
+El grafo se inicializa una sola vez por sesión mediante st.session_state.
+La tabla y el dibujo se construyen desde RAM. La persistencia precede a la
+actualización en memoria. En conexiones repetidas prevalece el último peso.
+Cada sesión mantiene su propio estado; los cambios externos se reflejan al
+iniciar una sesión nueva.
 
-Origen,Destino,Peso
-A,B,4.0
-A,C,2.0
+Los errores de entrada y de archivos se comunican mediante alertas visuales.
+Las filas inválidas del CSV se omiten con advertencias. Un archivo inexistente
+inicia una red vacía. Los fallos de lectura por permisos, codificación o E/S
+bloquean la escritura en esa sesión.
 
-Las conexiones son dirigidas y los pesos deben ser
-números finitos mayores o iguales a cero.
+## Validación
 
-### Manejo de errores
-El programa utiliza try-except para controlar entradas
-inválidas y errores durante el procesamiento de datos.
-Las filas corruptas del CSV se omiten durante la carga.
+Entorno de pruebas: Python 3.12.14 y Streamlit 1.67.0.
+Análisis de estilo: Flake8, sin errores.
+Pruebas automatizadas: 16 aprobadas con pytest y Streamlit AppTest.
+Las pruebas utilizan archivos temporales y conservan el CSV de ejemplo.
+La carpeta evidencia contiene la salida de validación y capturas de escritorio.
 
-### Verificación de estilo
-flake8 main.py grafo.py io_handler.py
+Caso de referencia: A → C → D → E, costo mínimo 7.
